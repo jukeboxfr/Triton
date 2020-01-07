@@ -1455,7 +1455,7 @@ namespace triton {
           auto node2 = this->buildConditionalSemantics(inst, dst, node1);
 
           /* Create symbolic expression */
-          auto expr = this->symbolicEngine->createSymbolicExpression(inst, node2, dst, "SUB(S) operation");
+          auto expr = this->symbolicEngine->createSymbolicExpression(inst, node2, dst, "RSB(S) operation");
 
           /* Get condition code node */
           auto cond = node2->getChildren()[0];
