@@ -1,6 +1,6 @@
 /* Compile:
- *  1. ARM:   arm-linux-gnueabi-gcc-7 -marm -o hello-world-arm hello-world.c
- *  2. Thumb: arm-linux-gnueabi-gcc-7 -mthumb -o hello-world-thumb hello-world.c
+ *  1. ARM:   arm-linux-gnueabi-gcc-7 -marm -o crackme_hash-arm crackme_hash.c
+ *  2. Thumb: arm-linux-gnueabi-gcc-7 -mthumb -o crackme_hash-thumb crackme_hash.c
  */
 
 #include <stdio.h>
