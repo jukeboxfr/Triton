@@ -304,9 +304,11 @@ namespace triton {
                     triton::arch::Immediate disp(op->mem.disp, immsize);
 
                     /* Specify that LEA contains a PC relative */
-                    if (base.getId() == this->pcId)
-                      /* TODO (cnheitman): Improve this. Better test. Check Thumb. */
-                      mem.setPcRelative(inst.getNextAddress() + 4);
+                    if (base.getId() == this->pcId) {
+                      /* TODO (cnheitman): It's working but the offset for Thumb seems odd. Check. */
+                      auto offset = this->thumb ? 0 : 4;
+                      mem.setPcRelative(inst.getNextAddress() + offset);
+                    }
 
                     /* Note that in ARM32 there is no segment register and scale value */
                     mem.setBaseRegister(base);
