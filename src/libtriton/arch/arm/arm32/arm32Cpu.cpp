@@ -305,9 +305,12 @@ namespace triton {
 
                     /* Specify that LEA contains a PC relative */
                     if (base.getId() == this->pcId) {
-                      /* TODO (cnheitman): It's working but the offset for Thumb seems odd. Check. */
-                      auto offset = this->thumb ? 0 : 4;
-                      mem.setPcRelative(inst.getNextAddress() + offset);
+                      /* TODO (cnheitman): Check if this works fine with STR
+                       * and a PC-relative memory operand.
+                       */
+                      auto offset = this->thumb ? 4 : 8;
+                      auto address = (inst.getAddress() + offset) & 0xfffffffc;
+                      mem.setPcRelative(address);
                     }
 
                     /* Note that in ARM32 there is no segment register and scale value */
