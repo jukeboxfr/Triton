@@ -10,7 +10,7 @@ import sys
 import lief
 import os
 
-DEBUG  = False
+DEBUG  = True
 INPUT  = 'arm32'
 SERIAL = None
 TARGET = os.path.join(os.path.dirname(__file__), 'crackme_hash-arm')
@@ -134,11 +134,11 @@ def libcMainHandler(ctx):
     ctx.setConcreteRegisterValue(ctx.registers.r1, argv)
 
     # Simulate call to main
-    debug('[+] Simulating call to main...')
+    # debug('[+] Simulating call to main...')
     ctx.setConcreteRegisterValue(ctx.registers.sp, ctx.getConcreteRegisterValue(ctx.registers.sp)-CPUSIZE.DWORD)
     push_addr = MemoryAccess(ctx.getConcreteRegisterValue(ctx.registers.sp), CPUSIZE.DWORD)
     ctx.setConcreteMemoryValue(push_addr, main_addr)
-    debug('    Pushing {:x} at {:x}'.format(main_addr, ctx.getConcreteRegisterValue(ctx.registers.sp)))
+    # debug('    Pushing {:x} at {:x}'.format(main_addr, ctx.getConcreteRegisterValue(ctx.registers.sp)))
 
     return None
 
@@ -157,11 +157,11 @@ def hookingHandler(ctx):
     for rel in customRelocation:
         if rel[2] == pc:
             # Simulate push {lr}
-            debug('[+] Simulating "push {lr}"')
+            # debug('[+] Simulating "push {lr}"')
             ctx.setConcreteRegisterValue(ctx.registers.sp, ctx.getConcreteRegisterValue(ctx.registers.sp)-CPUSIZE.DWORD)
             push_addr = MemoryAccess(ctx.getConcreteRegisterValue(ctx.registers.sp), CPUSIZE.DWORD)
             ctx.setConcreteMemoryValue(push_addr, ctx.getConcreteRegisterValue(ctx.registers.r14))
-            debug('    lr : {:x}'.format(ctx.getConcreteRegisterValue(ctx.registers.r14)))
+            # debug('    lr : {:x}'.format(ctx.getConcreteRegisterValue(ctx.registers.r14)))
 
             # Emulate the routine and the return value
             ret_value = rel[1](ctx)
@@ -169,11 +169,11 @@ def hookingHandler(ctx):
                 ctx.setConcreteRegisterValue(ctx.registers.r0, ret_value)
 
             # Simulate pop {lr}
-            debug('[+] Simulating "pop {pc}"')
+            # debug('[+] Simulating "pop {pc}"')
             pop_addr = MemoryAccess(ctx.getConcreteRegisterValue(ctx.registers.sp), CPUSIZE.DWORD)
             pc = ctx.getConcreteMemoryValue(pop_addr)
             ctx.setConcreteRegisterValue(ctx.registers.sp, ctx.getConcreteRegisterValue(ctx.registers.sp)+CPUSIZE.DWORD)
-            debug("    pc : {:x}".format(pc))
+            # debug("    pc : {:x}".format(pc))
 
             # Update PC
             ctx.setConcreteRegisterValue(ctx.registers.pc, pc)
@@ -204,7 +204,7 @@ def emulate(ctx, pc):
             debug('[-] Instruction not supported: %s\t%s' %(opcodes_str, str(instruction)))
             break
 
-        debug(instruction)
+        # debug(instruction)
 
         # .text:00010518                 LDR     R0, =unk_105C0  ; s
         # .text:0001051C                 BL      puts
